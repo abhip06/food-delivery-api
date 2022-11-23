@@ -6,6 +6,7 @@ import (
 	"github.com/abhip06/food-delivery-api/database"
 	"github.com/abhip06/food-delivery-api/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -13,6 +14,8 @@ func main() {
 	database.Connect()
 
 	app := fiber.New()
+
+	app.Use(cors.New())
 
 	port := os.Getenv("PORT")
 	if port == "" {
