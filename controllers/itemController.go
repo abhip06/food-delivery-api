@@ -130,3 +130,43 @@ func UpdateItem(c *fiber.Ctx) error {
 		"item":    item,
 	})
 }
+
+// Search Item by Name
+func SearchByName(c *fiber.Ctx) error {
+	keyword := c.Query("keyword")
+	var items []models.Item
+
+	database.DB.Where("name = ?", keyword).Find(&items)
+
+	if len(items) == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"success": "false",
+			"message": "No Items Found.",
+		})
+	}
+
+	return c.Status(200).JSON(fiber.Map{
+		"success": "true",
+		"items":   items,
+	})
+}
+
+// Search Item by Category
+func SearchByCategory(c *fiber.Ctx) error {
+	keyword := c.Query("keyword")
+	var items []models.Item
+
+	database.DB.Where("category = ?", keyword).Find(&items)
+
+	if len(items) == 0 {
+		return c.Status(404).JSON(fiber.Map{
+			"success": "false",
+			"message": "No Items Found.",
+		})
+	}
+
+	return c.Status(200).JSON(fiber.Map{
+		"success": "true",
+		"items":   items,
+	})
+}

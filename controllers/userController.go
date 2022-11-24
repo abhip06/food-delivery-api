@@ -32,10 +32,37 @@ func Register(c *fiber.Ctx) error {
 		Password: password,
 	}
 
-	database.DB.Create(&user)
+	database.DB.Create(&user) // save user in db
 
-	return c.JSON(user)
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Issuer:    user.ID,
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), //one day
+	})
 
+	token, err := claims.SignedString([]byte(SecretKey))
+
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"success": "false",
+			"message": "Could not log in",
+		})
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24), //one day
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"success": "true",
+		"message": "Successfully Registered",
+		"user":    user,
+	})
 }
 
 func Login(c *fiber.Ctx) error {
@@ -94,10 +121,11 @@ func Login(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": "true",
 		"message": "Loggin successfull",
+		"user":    user,
 	})
-
 }
 
+// Get user
 func User(c *fiber.Ctx) error {
 
 	cookie := c.Cookies("jwt")
@@ -120,8 +148,10 @@ func User(c *fiber.Ctx) error {
 
 	database.DB.Where("id = ?", claims.Issuer).First(&user)
 
-	return c.JSON(user)
-
+	return c.JSON(fiber.Map{
+		"success": "false",
+		"user":    user,
+	})
 }
 
 func Logout(c *fiber.Ctx) error {

@@ -15,14 +15,16 @@ func SetupRoutes(app *fiber.App) {
 	// Item Routes
 	app.Get("/api/v1/items", controllers.GetAllItems)
 	app.Get("/api/v1/item/:id", controllers.GetItem)
-	app.Post("/api/v1/admin/item", controllers.CreateItem)       // Admin
-	app.Put("/api/v1/admin/item/:id", controllers.UpdateItem)    // Admin
-	app.Delete("/api/v1/admin/item/:id", controllers.DeleteItem) // Admin
+	app.Get("/api/v1/search/name", controllers.SearchByName)         // Search by name
+	app.Get("/api/v1/search/category", controllers.SearchByCategory) // Search by category
+	app.Post("/api/v1/admin/item", controllers.CreateItem)           // Admin
+	app.Put("/api/v1/admin/item/:id", controllers.UpdateItem)        // Admin
+	app.Delete("/api/v1/admin/item/:id", controllers.DeleteItem)     // Admin
 
 	// Order Routes
-	app.Get("/api/v1/orders", controllers.GetAllOrders)
 	app.Get("/api/v1/order/:id", controllers.GetOrder)
 	app.Post("/api/v1/order", controllers.Order)
 	app.Delete("/api/v1/order/:id", controllers.CancelOrder)
-	app.Put("/api/v1/order/:id", controllers.UpdateOrderStatus) // Admin
+	app.Get("/api/v1/admin/orders", controllers.GetAllOrders)         // Admin
+	app.Put("/api/v1/admin/order/:id", controllers.UpdateOrderStatus) // Admin
 }
