@@ -24,5 +24,5 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/v1/order/:id", controllers.GetOrder)
 	app.Post("/api/v1/order", controllers.Order)
 	app.Delete("/api/v1/order/:id", controllers.CancelOrder)
-	// app.Put("/api/v1/order/:id", controllers.UpdateOrderStatus) // Admin
+	app.Put("/api/v1/order/:id", controllers.UpdateOrderStatus) // Admin
 }
