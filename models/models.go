@@ -23,6 +23,7 @@ type Item struct {
 	Ratings     *float64 `json:"ratings" gorm:"default:0"`
 	Category    string   `json:"category"`
 	IsAvailable bool     `json:"is_available" gorm:"default:true"`
+	IsFeatured  bool     `json:"is_featured" gorm:"default:false"`
 	UserRefer   string   `json:"user_id"`
 	User        User     `gorm:"foreignkey:UserRefer"`
 	CreatedAt   time.Time

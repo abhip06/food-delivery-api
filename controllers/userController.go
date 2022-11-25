@@ -45,7 +45,7 @@ func Register(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{
 			"success": "false",
-			"message": "Could not log in",
+			"message": "Could not sign up",
 		})
 	}
 
