@@ -15,6 +15,7 @@ func SetupRoutes(app *fiber.App) {
 	// Item Routes
 	app.Get("/api/v1/items", controllers.GetAllItems)
 	app.Get("/api/v1/item/:id", controllers.GetItem)
+	app.Get("/api/v1/featured", controllers.GetFeaturedItem)    // Get Featured Item
 	app.Get("/api/v1/search/name", controllers.SearchByName)         // Search by name
 	app.Get("/api/v1/search/category", controllers.SearchByCategory) // Search by category
 	app.Post("/api/v1/admin/item", controllers.CreateItem)           // Admin

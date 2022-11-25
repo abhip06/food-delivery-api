@@ -64,6 +64,24 @@ func GetItem(c *fiber.Ctx) error {
 	return c.Status(200).JSON(item)
 }
 
+func GetFeaturedItem(c *fiber.Ctx) error {
+
+	items := []models.Item{}
+
+	// result := database.DB.Find(&items,"is_featured = ?", 1)
+
+	result := database.DB.Where("is_featured = ?", 1).Find(&items)
+
+	if result.Error != nil {
+		return c.Status(200).JSON(fiber.Map{
+			"success": "false",
+			"message": "No Featured Item Found",
+		})
+	}
+
+	return c.Status(200).JSON(items)
+}
+
 func DeleteItem(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var item models.Item
@@ -100,11 +118,13 @@ func UpdateItem(c *fiber.Ctx) error {
 	}
 
 	type UpdateItem struct {
-		Name        string `json:"name"`
-		Price       uint   `json:"price"`
-		ShopAddress string `json:"shop_address"`
-		Category    string `json:"category"`
-		IsAvailable bool   `json:"is_available" gorm:"default:true"`
+		Name        string   `json:"name"`
+		Price       uint     `json:"price"`
+		ShopAddress string   `json:"shop_address"`
+		Category    string   `json:"category"`
+		IsAvailable bool     `json:"is_available" gorm:"default:true"`
+		IsFeatured  bool     `json:"is_featured" gorm:"default:false"`
+		Ratings     *float64 `json:"ratings" gorm:"default:0"`
 	}
 
 	var updateData UpdateItem
@@ -121,6 +141,8 @@ func UpdateItem(c *fiber.Ctx) error {
 	item.ShopAddress = updateData.ShopAddress
 	item.Category = updateData.Category
 	item.IsAvailable = updateData.IsAvailable
+	item.IsFeatured = updateData.IsFeatured
+	item.Ratings = updateData.Ratings
 
 	database.DB.Save(&item)
 
