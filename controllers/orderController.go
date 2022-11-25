@@ -4,7 +4,6 @@ import (
 	"github.com/abhip06/food-delivery-api/database"
 	"github.com/abhip06/food-delivery-api/models"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 func Order(c *fiber.Ctx) error {
@@ -13,8 +12,6 @@ func Order(c *fiber.Ctx) error {
 	if err := c.BodyParser(&order); err != nil {
 		return c.JSON(err)
 	}
-
-	order.ID = uuid.New().String()
 
 	database.DB.Save(&order)
 
@@ -26,8 +23,6 @@ func Order(c *fiber.Ctx) error {
 
 func GetAllOrders(c *fiber.Ctx) error {
 	var orders []models.Order
-
-	database.DB.Find(&orders)
 
 	if len(orders) == 0 {
 		return c.Status(404).JSON(fiber.Map{
