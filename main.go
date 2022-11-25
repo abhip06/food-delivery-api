@@ -15,7 +15,9 @@ func main() {
 
 	app := fiber.New()
 
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {
