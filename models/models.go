@@ -2,6 +2,8 @@ package models
 
 import (
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // User model
@@ -39,18 +41,15 @@ type ShippingInfo struct {
 
 // Order Model
 type Order struct {
-	ID                string       `json:"id" gorm:"type:varchar(255);primaryKey"`
-	ShippingInfoRefer int          `json:"shipping_info"`
-	ShippingInfo      ShippingInfo `gorm:"foreignkey:ShippingInfoRefer"`
-	ItemRefer         string       `json:"item_id"`
-	OrderItems        Item         `gorm:"foreignkey:ItemRefer"`
-	UserRefer         string       `json:"user_id"`
-	User              User         `gorm:"foreignkey:UserRefer"`
-	ItemsPrice        uint         `json:"itemsprice"`
-	TaxPrice          uint         `json:"taxprice"`
-	DeliveryCharges   *uint        `json:"delivery_charges" gorm:"default:0"`
-	TotalPrice        uint         `json:"totalprice"`
-	OrderStatus       string       `json:"orderstatus" gorm:"default:Processing"`
-	DeliveredAt       time.Time
-	OrderedAt         time.Time
+	ID              primitive.ObjectID `json:"_id" bson"_id"`
+	ShippingInfo    ShippingInfo       `json:"shipping_info" bson:"shipping_info"`
+	OrderItems      []Item             `json:"order_items" bson:"order_items"`
+	User            User               `json:"user_refer" bson:"user_refer"`
+	ItemsPrice      uint               `json:"itemsprice"`
+	TaxPrice        uint               `json:"taxprice"`
+	DeliveryCharges *uint              `json:"delivery_charges" bson:"delivery_charges"`
+	TotalPrice      uint               `json:"totalprice"`
+	OrderStatus     string             `json:"order_status" bson:"order_status"`
+	DeliveredAt     time.Time          `json:"delivered_at" bson:"delivered_at"`
+	OrderedAt       time.Time          `json:"ordered_at" bson:"ordered_at"`
 }

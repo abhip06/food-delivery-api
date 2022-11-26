@@ -4,7 +4,6 @@ import (
 	"github.com/abhip06/food-delivery-api/database"
 	"github.com/abhip06/food-delivery-api/models"
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 func Order(c *fiber.Ctx) error {
@@ -14,9 +13,7 @@ func Order(c *fiber.Ctx) error {
 		return c.JSON(err)
 	}
 
-	order.ID = uuid.New().String()
-
-	database.DB.Save(&order)
+	database.DB.Create(&order)
 
 	return c.Status(200).JSON(fiber.Map{
 		"success": "true",
